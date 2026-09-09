@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bench</title>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="referrer" content="no-referrer">
+<meta name="theme-color" content="#E9E7E2">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Bench">
+<link rel="manifest" href="/manifest.json">
+<link rel="apple-touch-icon" href="/icon-180.png">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --paper:#E9E7E2; --card:#FAF9F7; --ink:#16181A; --mute:#71757A;
+  --line:#D6D3CC; --blue:#2B4CD8; --red:#A82D1C;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;height:100%}
+body{
+  font-family:Archivo,"Helvetica Neue",Arial,sans-serif;
+  background:var(--paper);color:var(--ink);
+  padding:max(18px,env(safe-area-inset-top)) 18px max(18px,env(safe-area-inset-bottom));
+  max-width:760px;margin:0 auto;
+}
+.top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:16px}
+.mark{font-size:19px;font-weight:700;letter-spacing:-.02em}
+.date{font-size:13px;color:var(--mute)}
+nav{display:flex;gap:2px;border-bottom:1px solid var(--line);margin-bottom:20px;flex-wrap:wrap}
+.tab{border:none;background:none;font:inherit;font-size:14px;font-weight:500;color:var(--mute);
+  padding:8px 13px;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px}
+.tab:hover{color:var(--ink)}
+.tab[aria-selected="true"]{color:var(--ink);border-bottom-color:var(--blue)}
+.tab:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.view[hidden]{display:none}
+
+.hero{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin-bottom:22px}
+.up{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:14px 15px}
+.up.late{border-color:var(--red)}
+.num{font-size:38px;font-weight:600;letter-spacing:-.045em;line-height:1}
+.up.late .num{color:var(--red)}
+.unit{font-size:12px;color:var(--mute);margin-left:5px;font-weight:500;letter-spacing:0}
+.uptitle{font-size:14px;font-weight:500;margin-top:9px;line-height:1.35}
+.upproj{font-size:12px;color:var(--mute);margin-top:3px}
+
+.row{display:flex;gap:7px;flex-wrap:wrap;margin-bottom:16px}
+input,select{font:inherit;font-size:16px;padding:9px 10px;border:1px solid var(--line);
+  border-radius:3px;background:var(--card);color:var(--ink);min-width:0}
+input:focus,select:focus{outline:2px solid var(--blue);outline-offset:-1px;border-color:transparent}
+.grow{flex:1 1 190px}
+.btn{font:inherit;font-size:15px;font-weight:500;padding:9px 16px;border-radius:3px;
+  border:1px solid var(--ink);background:var(--ink);color:var(--card);cursor:pointer}
+.btn:hover{background:#000}
+.btn:disabled{opacity:.45;cursor:default}
+.btn2{background:none;color:var(--ink);border-color:var(--line)}
+.btn2:hover{background:var(--card)}
+
+.group{font-size:12px;font-weight:600;color:var(--mute);margin:20px 0 7px}
+.item{display:flex;align-items:flex-start;gap:11px;padding:10px 12px;background:var(--card);
+  border:1px solid var(--line);border-radius:3px;margin-bottom:5px}
+.item.done .itext{text-decoration:line-through;color:var(--mute)}
+.chip{flex:none;min-width:54px;text-align:center;font-size:12px;font-weight:600;padding:3px 6px;
+  border-radius:2px;background:var(--paper);color:var(--mute);margin-top:1px}
+.chip.late{background:var(--red);color:#fff}
+.chip.soon{background:var(--blue);color:#fff}
+.imain{flex:1;min-width:0}
+.itext{font-size:15px;line-height:1.4;word-break:break-word}
+.imeta{font-size:12px;color:var(--mute);margin-top:2px}
+.x{border:none;background:none;font:inherit;font-size:13px;color:var(--mute);cursor:pointer;padding:3px 6px;flex:none}
+.x:hover{color:var(--red)}
+
+.metric{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:14px 15px;margin-bottom:9px}
+.mhead{display:flex;align-items:baseline;justify-content:space-between;gap:10px}
+.mname{font-size:14px;font-weight:600}
+.mval{font-size:26px;font-weight:600;letter-spacing:-.03em}
+.mdelta{font-size:12px;color:var(--mute);margin-left:6px;font-weight:500}
+.spark{display:block;width:100%;height:44px;margin-top:9px}
+
+.voice{display:flex;flex-direction:column;align-items:center;gap:14px;padding:22px 0 18px}
+.mic{width:104px;height:104px;border-radius:50%;border:1px solid var(--ink);background:var(--ink);
+  color:var(--card);cursor:pointer;display:flex;align-items:center;justify-content:center;
+  transition:transform .12s ease,background .12s ease}
+.mic:hover{transform:scale(1.03)}
+.mic:focus-visible{outline:2px solid var(--blue);outline-offset:4px}
+.mic.live{background:var(--red);border-color:var(--red);animation:pulse 1.6s ease-in-out infinite}
+.mic:disabled{opacity:.4;cursor:default}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(168,45,28,.42)}50%{box-shadow:0 0 0 16px rgba(168,45,28,0)}}
+@media(prefers-reduced-motion:reduce){.mic.live{animation:none}.mic:hover{transform:none}}
+.heard{font-size:17px;text-align:center;max-width:46ch;line-height:1.45;min-height:25px}
+.hint{font-size:13px;color:var(--mute);text-align:center;min-height:20px;max-width:46ch;line-height:1.5}
+.toggle{border:none;background:none;font:inherit;font-size:13px;color:var(--mute);cursor:pointer;
+  text-decoration:underline;text-underline-offset:3px;padding:4px}
+.toggle:hover{color:var(--ink)}
+
+.msg{max-width:64ch;font-size:15px;line-height:1.6;margin-bottom:14px;white-space:pre-wrap}
+.msg.you{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:11px 14px}
+.msg.it{padding-left:14px;border-left:2px solid var(--blue)}
+.brief{background:var(--card);border:1px solid var(--line);border-radius:3px;padding:18px 20px;
+  font-size:16px;line-height:1.62;white-space:pre-wrap;max-width:66ch}
+.empty{color:var(--mute);font-size:14px;line-height:1.6;max-width:56ch;padding:6px 0}
+.err{color:var(--red);font-size:13px;margin-top:10px}
+@media(max-width:520px){.num{font-size:32px}body{padding-left:14px;padding-right:14px}}
+</style>
+</head>
+<body>
+
+<div class="top">
+  <div class="mark">Bench</div>
+  <div class="date" id="date"></div>
+</div>
+
+<nav role="tablist">
+  <button class="tab" role="tab" data-view="ask" aria-selected="true">Ask</button>
+  <button class="tab" role="tab" data-view="board" aria-selected="false">Board</button>
+  <button class="tab" role="tab" data-view="numbers" aria-selected="false">Numbers</button>
+  <button class="tab" role="tab" data-view="brief" aria-selected="false">Brief</button>
+</nav>
+
+<section class="view" id="v-ask">
+  <div class="voice">
+    <button class="mic" id="mic" aria-label="Start talking">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true">
+        <rect x="9" y="2.5" width="6" height="11.5" rx="3"></rect>
+        <path d="M5 11.5a7 7 0 0 0 14 0"></path>
+        <path d="M12 18.5V21.5"></path>
+      </svg>
+    </button>
+    <div class="heard" id="heard"></div>
+    <div class="hint" id="hint">Tap and talk. It knows what's on your board.</div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;justify-content:center">
+      <button class="toggle" id="voiceout">Answers are read aloud</button>
+      <button class="toggle" id="handsfree">Hands-free is off</button>
+    </div>
+  </div>
+  <div id="chat"></div>
+  <div class="row" style="margin-top:14px">
+    <input class="grow" id="q" placeholder="Or type it" autocomplete="off">
+    <button class="btn btn2" id="send">Send</button>
+  </div>
+</section>
+
+<section class="view" id="v-board" hidden>
+  <div class="hero" id="hero"></div>
+  <div class="row">
+    <input class="grow" id="t" placeholder="What needs doing" autocomplete="off">
+    <input id="proj" placeholder="Project" style="width:140px" autocomplete="off">
+    <input id="due" type="date">
+    <button class="btn" id="add">Add</button>
+  </div>
+  <div id="list"></div>
+</section>
+
+<section class="view" id="v-numbers" hidden>
+  <div class="row">
+    <input class="grow" id="mname" placeholder="Name a number to track" autocomplete="off">
+    <button class="btn btn2" id="addm">Track it</button>
+  </div>
+  <div class="row" id="logrow" hidden>
+    <select class="grow" id="mfor"></select>
+    <input id="mval" placeholder="Value" style="width:120px" inputmode="decimal" autocomplete="off">
+    <button class="btn" id="logv">Log</button>
+  </div>
+  <div id="metrics"></div>
+</section>
+
+<section class="view" id="v-brief" hidden>
+  <div class="row">
+    <button class="btn" id="writebrief">Write today's brief</button>
+    <button class="btn btn2" id="readbrief" hidden>Read it to me</button>
+  </div>
+  <div id="briefwrap"></div>
+</section>
+
+<div class="err" id="err"></div>
+<script src="/app.js"></script>
+</body>
+</html>
