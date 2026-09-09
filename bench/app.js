@@ -4,7 +4,7 @@
    - The board is sent as a cached system prefix, so repeat questions get a
      cheaper and faster first token.
    - Speech recognition uses interim results so you see words as you say them.
-   - Voices are warmed on load; picking one lazily costs half a second. */
+   - Voices are warmed on load; picking one lazily costs half a second. */ 
 
 const KEY = "bench.state.v1";
 const $ = (id) => document.getElementById(id);
