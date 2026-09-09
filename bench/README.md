@@ -1,4 +1,4 @@
-# Bench
+# Bench 
 
 A personal command center you talk to. Board, numbers, morning brief, voice Q&A.
 
